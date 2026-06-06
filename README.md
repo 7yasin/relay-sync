@@ -4,12 +4,23 @@ Relay is a Windows-only local HTTP server that syncs clipboard text, images, and
 
 The Windows PC is always the Relay server. iPhone and macOS devices are clients only.
 
+## Navigation
+
+* [Requirements](#requirements)
+* [Quick Setup](#quick-setup)
+* [Apple Shortcuts](#apple-shortcuts)
+* [API Contract](#api-contract)
+* [Security Notes](#security-notes)
+* [File Size Limits](#file-size-limits)
+* [Configuration](#configuration)
+* [Developer Notes](#developer-notes)
+
 ## Requirements
 
-- Windows 10 or later
-- Node.js 18 or later
-- .NET Framework 4.x compiler (`csc.exe`), normally included with Windows/.NET Framework
-- iPhone or macOS device on the same local network
+* Windows 10 or later
+* Node.js 18 or later
+* .NET Framework 4.x compiler (`csc.exe`), normally included with Windows/.NET Framework
+* iPhone or macOS device on the same local network
 
 ## Quick Setup
 
@@ -43,16 +54,19 @@ You can also double-click `Start Relay.vbs`. It opens a visible command window, 
 
 ## Apple Shortcuts
 
-Configure your Shortcut with:
+Install the shortcuts on your iPhone or macOS device:
 
-- Server URL: `http://YOUR_PC_IP:3080`
-- Bearer Token: `Bearer YOUR_TOKEN_HERE`
-- No trailing slash on the Server URL
-- Same local network as the Windows PC
+* [Relay Send](https://www.icloud.com/shortcuts/01152728aafd4f4f80110de0db7161c3)
+* [Relay Get](https://www.icloud.com/shortcuts/efbdb3c2c59a4e7a9d53a07744cf00f5)
+
+Configure each Shortcut with:
+
+* Server URL: `http://YOUR_PC_IP:3080`
+* Bearer Token: `Bearer YOUR_TOKEN_HERE`
+* No trailing slash on the Server URL
+* Same local network as the Windows PC
 
 Try the `.local` URL from setup first. If it does not work, use the IP address. A wrong IP address can make Shortcuts wait until the request times out.
-
-Shortcut links are not included in this repository yet. Any public Shortcut links should be added here only when they are final.
 
 ## API Contract
 
@@ -124,13 +138,13 @@ Relay uses HTTP on your local network. Do not expose it to the internet, do not 
 
 Relay checks:
 
-- Bearer JWT token authentication
-- LAN/loopback IP filtering
-- Rate limiting
-- Request body size limits
-- Path traversal protection for `GET /file`
-- Real path checks to block symlink/junction escapes
-- Filename sanitization for uploaded files
+* Bearer JWT token authentication
+* LAN/loopback IP filtering
+* Rate limiting
+* Request body size limits
+* Path traversal protection for `GET /file`
+* Real path checks to block symlink/junction escapes
+* Filename sanitization for uploaded files
 
 If `ALLOWED_SUBNET` is empty, private LAN IPs and loopback are allowed. If `ALLOWED_SUBNET` is set, only addresses with that prefix and loopback are allowed.
 
@@ -148,10 +162,10 @@ Relay currently transfers images and files as base64 inside JSON. This is simple
 
 Defaults:
 
-- JSON body limit: 50 MB
-- Text body limit: 200 MB
-- Clipboard copied file limit: 100 MB (`CLIPBOARD_MAX_FILE_MB`)
-- Clipboard helper output buffer: 220 MB (`HELPER_MAX_BUFFER_MB`)
+* JSON body limit: 50 MB
+* Text body limit: 200 MB
+* Clipboard copied file limit: 100 MB (`CLIPBOARD_MAX_FILE_MB`)
+* Clipboard helper output buffer: 220 MB (`HELPER_MAX_BUFFER_MB`)
 
 Base64 adds about 33 percent overhead, so realistic file sizes are lower than the raw request limits.
 
@@ -161,15 +175,15 @@ Local configuration is written to `.env` by `npm run setup`.
 
 Important values:
 
-- `PORT=3080`
-- `JWT_SECRET=...`
-- `ALLOWED_SUBNET=`
-- `JWT_MAX_AGE=`
-- `RATE_LIMIT_MAX=60`
-- `RATE_LIMIT_WINDOW_MS=60000`
-- `HELPER_MAX_BUFFER_MB=220`
-- `CLIPBOARD_MAX_FILE_MB=100`
-- `ALLOWED_FILE_ROOTS=`
+* `PORT=3080`
+* `JWT_SECRET=...`
+* `ALLOWED_SUBNET=`
+* `JWT_MAX_AGE=`
+* `RATE_LIMIT_MAX=60`
+* `RATE_LIMIT_WINDOW_MS=60000`
+* `HELPER_MAX_BUFFER_MB=220`
+* `CLIPBOARD_MAX_FILE_MB=100`
+* `ALLOWED_FILE_ROOTS=`
 
 Leave `ALLOWED_SUBNET` empty for normal home LAN use. Set it only if you need a stricter prefix such as `192.168.1.`.
 
