@@ -1,0 +1,9 @@
+node_modules/
+.env
+.env.local
+relay-token.txt
+certs/
+server.key
+server.crt
+*.log
+npm-debug.log*
